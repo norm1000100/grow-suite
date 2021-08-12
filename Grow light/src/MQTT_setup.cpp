@@ -77,7 +77,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
 long lastReconnectAttempt = 0;
 
 boolean reconnect() {
-  if (client.connect("arduinoClient")) {
+  if (client.connect("Growlamp")) {
     // Once connected, publish an announcement...
     client.publish("grow_light_out","hello world");
     // ... and resubscribe
