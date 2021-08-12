@@ -31,3 +31,5 @@
 *.out
 *.app
 Grow light/include/secret.h
+.vscode/c_cpp_properties.json
+Grow light/.vscode/extensions.json
