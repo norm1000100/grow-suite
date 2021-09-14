@@ -10,6 +10,9 @@
 const char* ssid = SECRET_SSID;
 const char* password = SECRET_PASSWORD;
 const char* mqtt_server = SECRET_BROKER;
+const char* sub_topic = "garden/light";
+const char* pub_topic = "grow_light_out";
+const char* device_name = "Growlamp";
 
 
 WiFiClient espClient;
@@ -58,7 +61,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   off based on the attached message
 
   */
-  if (String(topic) == "garden/light"){
+  if (String(topic) == sub_topic){
       if (temp_message == "on"){
         Serial.println("on");
         digitalWrite(relay, LOW);
@@ -77,11 +80,11 @@ void callback(char* topic, byte* payload, unsigned int length) {
 long lastReconnectAttempt = 0;
 
 boolean reconnect() {
-  if (client.connect("Growlamp")) {
+  if (client.connect(device_name)) {
     // Once connected, publish an announcement...
-    client.publish("grow_light_out","hello world");
+    client.publish(pub_topic,"hello world");
     // ... and resubscribe
-    client.subscribe("garden/light");
+    client.subscribe(sub_topic);
   }
   return client.connected();
 }
@@ -89,7 +92,7 @@ boolean reconnect() {
 void setup() {
   pinMode(status_led, OUTPUT);     // Initialize the Status LED pin as an output
   pinMode(relay,OUTPUT); // Initialize the relay pin as output
-  digitalWrite(relay,HIGH);
+  digitalWrite(relay,HIGH);// Start the relay high (off)
   digitalWrite(status_led, HIGH); // Turn off the status LED
   Serial.begin(9600);
   setup_wifi();
